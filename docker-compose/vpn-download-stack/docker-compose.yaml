@@ -1,0 +1,76 @@
+version: "3"
+services:
+    gluetun:
+        image: qmcgaw/gluetun
+        container_name: gluetun
+        # line above must be uncommented to allow external containers to connect.
+        # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/connect-a-container-to-gluetun.md#external-container-to-gluetun
+        cap_add:
+          - NET_ADMIN
+        devices:
+          - /dev/net/tun:/dev/net/tun
+        ports:
+          - 6881:6881
+          - 6881:6881/udp
+          - 8085:8085 # qbittorrent
+          - 5800:5800 #jdownloader2
+          - 9117:9117 # Jackett
+        volumes:
+          - /home/ubuntu/docker/arr-stack:/gluetun
+        environment:
+          # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
+          - VPN_SERVICE_PROVIDER=surfshark
+          - VPN_TYPE=wireguard
+          # OpenVPN:
+          # - OPENVPN_USER=
+          # - OPENVPN_PASSWORD=
+          # Wireguard:
+          - WIREGUARD_PRIVATE_KEY= # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/nordvpn.>
+          - WIREGUARD_ADDRESSES=
+          # Timezone for accurate log times
+          - TZ=Asia/Karachi
+          # Server list updater
+          # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/servers.md#update-the-vpn-servers-list
+          - UPDATER_PERIOD=24h  
+    qbittorrent:
+        image: lscr.io/linuxserver/qbittorrent
+        container_name: qbittorrent
+        network_mode: "service:gluetun"
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+          - WEBUI_PORT=8085
+        volumes:
+          - /home/ubuntu/docker/arr-stack/qbittorrent:/config
+          - /home/ubuntu/docker/arr-stack/qbittorrent/downloads:/downloads
+        depends_on:
+          - gluetun
+        restart: always
+    jackett:
+        image: lscr.io/linuxserver/jackett:latest
+        container_name: jackett
+        network_mode: "service:gluetun"
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+          - AUTO_UPDATE=true #optional
+        volumes:
+          - /docker/jackett/data:/config
+          - /docker/jackett/blackhole:/downloads
+        depends_on:
+          - gluetun
+        restart: unless-stopped
+    jdownloader-2:
+        image: jlesage/jdownloader-2
+        container_name: jdownloader-2
+        network_mode: "service:glutun"
+        ports:
+            - "5800:5800"
+        volumes:
+            - /docker/appdata/jdownloader-2:/config
+            - /mnt/downloads/JDownloader:/output
+        depends_on:
+            - gluetun
+        restart: always
