@@ -9,28 +9,13 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/sonarr/data:/config
-          - /mnt/media/tv:/tv #optional
-          - /mnt/media/anime:/anime #optional
-          - /mnt/media/cartoons:/cartoons #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/media/tv:/tv
+          - /mnt/media/anime:/anime
+          - /mnt/media/cartoons:/cartoons
+          - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
         ports:
           - 8989:8989
-        restart: unless-stopped
-    sonarr-anime:
-        image: lscr.io/linuxserver/sonarr:latest
-        container_name: sonarr-anime
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/sonarr-anime/data:/config
-          - /mnt/media/tv:/tv #optional
-          - /mnt/media/anime:/anime #optional
-          - /mnt/media/cartoons:/cartoons #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
-        ports:
-          - 8990:8989
         restart: unless-stopped
     radarr:
         image: lscr.io/linuxserver/radarr:latest
@@ -41,24 +26,11 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/radarr/data:/config
-          - /mnt/media/movies:/movies #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/media/movies:/movies
+          - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
         ports:
           - 7878:7878
-        restart: unless-stopped
-    radarr-anime:
-        image: lscr.io/linuxserver/radarr:latest
-        container_name: radarr-anime
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/radarr-anime/data:/config
-          - /mnt/media/movies:/movies #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
-        ports:
-          - 7879:7878
         restart: unless-stopped
     readarr:
         image: lscr.io/linuxserver/readarr:develop
@@ -69,8 +41,9 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/readarr/data:/config
-          - /mnt/media/ebooks/readarr:/books #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/media/ebooks/readarr:/books
+          - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
         ports:
           - 8787:8787
         restart: unless-stopped
@@ -95,8 +68,9 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/lidarr/data:/config
-          - /mnt/media/music/lidarr:/music #optional
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/media/music/lidarr:/music
+          - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
         ports:
           - 8686:8686
         restart: unless-stopped
@@ -123,7 +97,7 @@ services:
           - TORRENTING_PORT=6881
         volumes:
           - /docker/qbittorrent/config:/config
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/downloads/uTorrent:/downloads
         ports:
           - 8080:8080
           - 6881:6881
@@ -138,7 +112,7 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/sabnzbd/config:/config
-          - /mnt/downloads/uTorrent:/downloads #optional
+          - /mnt/downloads/Usenet:/downloads
           - /mnt/downloads/_TEMP/sabnzbd:/incomplete-downloads
         ports:
           - 8081:8080
@@ -169,20 +143,6 @@ services:
         ports:
           - 5000:5000
         restart: unless-stopped
-    # jackett:
-        # image: lscr.io/linuxserver/jackett:latest
-        # container_name: jackett
-        # environment:
-          # - PUID=1000
-          # - PGID=1000
-          # - TZ=Asia/Karachi
-          # - AUTO_UPDATE=true #optional
-        # volumes:
-          # - /docker/jackett/data:/config
-          # - /docker/jackett/blackhole:/downloads
-        # ports:
-          # - 9117:9117
-        # restart: unless-stopped
     flaresolverr:
         image: 'ghcr.io/flaresolverr/flaresolverr:latest'
         restart: unless-stopped
@@ -200,8 +160,8 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/bazarr/config:/config
-          - /mnt/media/movies:/movies #optional
-          - /mnt/media/tv:/tv #optional
+          - /mnt/media/movies:/movies
+          - /mnt/media/tv:/tv
         ports:
           - 6767:6767
         restart: unless-stopped
@@ -246,6 +206,7 @@ services:
           - /docker/mylar3/config:/config
           - /mnt/media/ebooks/Library/Comics:/comics
           - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
         ports:
           - 8090:8090
         restart: unless-stopped
