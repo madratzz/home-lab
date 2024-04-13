@@ -47,18 +47,6 @@ services:
         ports:
           - 8787:8787
         restart: unless-stopped
-    prowlarr:
-        image: lscr.io/linuxserver/prowlarr:latest
-        container_name: prowlarr
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/prowlarr/data:/config
-        ports:
-          - 9696:9696
-        restart: unless-stopped
     lidarr:
         image: lscr.io/linuxserver/lidarr:latest
         container_name: lidarr
@@ -74,6 +62,99 @@ services:
         ports:
           - 8686:8686
         restart: unless-stopped
+    bazarr:
+        image: lscr.io/linuxserver/bazarr:latest
+        container_name: bazarr
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        volumes:
+          - /docker/bazarr/config:/config
+          - /mnt/media/movies:/movies #optional
+          - /mnt/media/tv:/tv
+        ports:
+          - 6767:6767
+        restart: unless-stopped
+    prowlarr:
+        image: lscr.io/linuxserver/prowlarr:latest
+        container_name: prowlarr
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        volumes:
+          - /docker/prowlarr/data:/config
+        ports:
+          - 9696:9696
+        restart: unless-stopped
+    flaresolverr:
+        image: 'ghcr.io/flaresolverr/flaresolverr:latest'
+        restart: unless-stopped
+        environment:
+            - LOG_LEVEL=info
+        ports:
+            - 8191:8191
+        container_name: flaresolverr
+    tranga-api:
+        image: glax/tranga-api:latest
+        container_name: tranga-api
+        volumes:
+          - /mnt/media/ebooks/Library/Manga:/Manga
+          - /docker/taranga/data:/usr/share/tranga-api
+        ports:
+          - "6531:6531"
+        restart: unless-stopped
+    tranga-website:
+        image: glax/tranga-website:latest
+        container_name: tranga-website
+        ports:
+          - "9555:80"
+        depends_on: 
+          - tranga-api
+        restart: unless-stopped
+    mylar3:
+        image: lscr.io/linuxserver/mylar3:latest
+        container_name: mylar3
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        volumes:
+          - /docker/mylar3/config:/config
+          - /mnt/media/ebooks/Library/Comics:/comics
+          - /mnt/downloads/uTorrent:/downloads
+          - /mnt/downloads/Usenet:/usenet
+        ports:
+          - 8090:8090
+        restart: unless-stopped
+    komga:
+        image: gotson/komga
+        container_name: komga
+        volumes:
+          - /docker/bazarr/config:/config
+          - /mnt/media/ebooks/Library/Manga:/data
+        ports:
+          - 25600:25600
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        restart: unless-stopped
+    kavita:
+        image: lscr.io/linuxserver/kavita:latest
+        container_name: kavita
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        volumes:
+          - /docker/kavita/config:/config
+          - /docker/kavita/data:/data
+          - /mnt/media/ebooks:/ebooks
+        ports:
+          - 5000:5000
+        restart: unless-stopped
     overseerr:
         image: lscr.io/linuxserver/overseerr:latest
         container_name: overseerr
@@ -85,6 +166,18 @@ services:
           - /docker/overseerr/config:/config
         ports:
           - 5055:5055
+        restart: unless-stopped
+    tautulli:
+        image: lscr.io/linuxserver/tautulli:latest
+        container_name: tautulli
+        environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Karachi
+        volumes:
+          - /docker/tautulli/config:/config
+        ports:
+          - 8181:8181
         restart: unless-stopped
     qbittorrent:
         image: lscr.io/linuxserver/qbittorrent:latest
@@ -116,99 +209,6 @@ services:
           - /mnt/downloads/_TEMP/sabnzbd:/incomplete-downloads
         ports:
           - 8081:8080
-        restart: unless-stopped
-    tautulli:
-        image: lscr.io/linuxserver/tautulli:latest
-        container_name: tautulli
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/tautulli/config:/config
-        ports:
-          - 8181:8181
-        restart: unless-stopped
-    kavita:
-        image: lscr.io/linuxserver/kavita:latest
-        container_name: kavita
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/kavita/config:/config
-          - /docker/kavita/data:/data
-          - /mnt/media/ebooks:/ebooks
-        ports:
-          - 5000:5000
-        restart: unless-stopped
-    flaresolverr:
-        image: 'ghcr.io/flaresolverr/flaresolverr:latest'
-        restart: unless-stopped
-        environment:
-            - LOG_LEVEL=info
-        ports:
-            - 8191:8191
-        container_name: flaresolverr
-    bazarr:
-        image: lscr.io/linuxserver/bazarr:latest
-        container_name: bazarr
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/bazarr/config:/config
-          - /mnt/media/movies:/movies
-          - /mnt/media/tv:/tv
-        ports:
-          - 6767:6767
-        restart: unless-stopped
-    tranga-api:
-        image: glax/tranga-api:latest
-        container_name: tranga-api
-        volumes:
-          - /mnt/media/ebooks/Library/Manga:/Manga
-          - /docker/taranga/data:/usr/share/tranga-api
-        ports:
-          - "6531:6531"
-        restart: unless-stopped
-    tranga-website:
-        image: glax/tranga-website:latest
-        container_name: tranga-website
-        ports:
-          - "9555:80"
-        depends_on: 
-          - tranga-api
-        restart: unless-stopped
-    komga:
-        image: gotson/komga
-        container_name: komga
-        volumes:
-          - /docker/bazarr/config:/config
-          - /mnt/media/ebooks/Library/Manga:/data
-        ports:
-          - 25600:25600
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        restart: unless-stopped
-    mylar3:
-        image: lscr.io/linuxserver/mylar3:latest
-        container_name: mylar3
-        environment:
-          - PUID=1000
-          - PGID=1000
-          - TZ=Asia/Karachi
-        volumes:
-          - /docker/mylar3/config:/config
-          - /mnt/media/ebooks/Library/Comics:/comics
-          - /mnt/downloads/uTorrent:/downloads
-          - /mnt/downloads/Usenet:/usenet
-        ports:
-          - 8090:8090
         restart: unless-stopped
     notifiarr:
         image: golift/notifiarr
