@@ -12,8 +12,8 @@ services:
           - /mnt/media/tv:/tv
           - /mnt/media/anime:/anime
           - /mnt/media/cartoons:/cartoons
-          - /mnt/downloads/torrents:/downloads
-          - /mnt/downloads/usenet:/usenet
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
         ports:
           - 8989:8989
         restart: unless-stopped
@@ -27,8 +27,8 @@ services:
         volumes:
           - /docker/radarr/data:/config
           - /mnt/media/movies:/movies
-          - /mnt/downloads/torrents:/downloads
-          - /mnt/downloads/usenet:/usenet
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
         ports:
           - 7878:7878
         restart: unless-stopped
@@ -42,8 +42,8 @@ services:
         volumes:
           - /docker/readarr/data:/config
           - /mnt/media/ebooks/readarr:/books
-          - /mnt/downloads/torrents:/downloads
-          - /mnt/downloads/usenet:/usenet
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
         ports:
           - 8787:8787
         restart: unless-stopped
@@ -57,8 +57,8 @@ services:
         volumes:
           - /docker/lidarr/data:/config
           - /mnt/media/music/lidarr:/music
-          - /mnt/downloads/torrents:/downloads
-          - /mnt/downloads/usenet:/usenet
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
         ports:
           - 8686:8686
         restart: unless-stopped
@@ -71,7 +71,7 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/bazarr/config:/config
-          - /mnt/media/movies:/movies #optional
+          - /mnt/media/movies:/movies
           - /mnt/media/tv:/tv
         ports:
           - 6767:6767
@@ -123,8 +123,8 @@ services:
         volumes:
           - /docker/mylar3/config:/config
           - /mnt/media/ebooks/Library/Comics:/comics
-          - /mnt/downloads/torrents:/downloads
-          - /mnt/downloads/usenet:/usenet
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
         ports:
           - 8090:8090
         restart: unless-stopped
@@ -190,7 +190,7 @@ services:
           - TORRENTING_PORT=6881
         volumes:
           - /docker/qbittorrent/config:/config
-          - /mnt/downloads/torrents:/downloads
+          - /mnt/downloads/torrents:/mnt/downloads/torrents
         ports:
           - 8080:8080
           - 6881:6881
@@ -205,8 +205,8 @@ services:
           - TZ=Asia/Karachi
         volumes:
           - /docker/sabnzbd/config:/config
-          - /mnt/downloads/usenet:/downloads
-          - /mnt/downloads/_temp/sabnzbd:/incomplete-downloads
+          - /mnt/downloads/usenet:/mnt/downloads/usenet
+          - /mnt/downloads/_temp/usenet:/mnt/downloads/_temp/usenet
         ports:
           - 8081:8080
         restart: unless-stopped
