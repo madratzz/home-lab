@@ -208,7 +208,7 @@ services:
           - /mnt/downloads/usenet:/mnt/downloads/usenet
           - /mnt/downloads/_temp/usenet:/mnt/downloads/_temp/usenet
         ports:
-          - 8081:8080
+          - 7777:8080
         restart: unless-stopped
     notifiarr:
         image: golift/notifiarr
